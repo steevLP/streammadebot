@@ -1,6 +1,6 @@
 const {RichEmbed} = require('discord.js');
 const fs = require('fs');
-module.exports.run = async (client, msg, args) => {
+module.exports.run = async (client, msg, settings, args) => {
     /*[{ "name":"nachricht" }].foreach()*/
     // !custom create name nachricht
     // !custom arg[0] arg[1] arg[2]

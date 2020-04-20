@@ -3,7 +3,7 @@ const client = new discord.Client()
 
 client.commands = new discord.Collection();
 
-const {cmd_prefix,token} = require("./config.json")
+const {token} = require("./config.json");
 const fs = require('fs');
 
 fs.readdir('./cmd', (err, files) => {
@@ -26,7 +26,9 @@ client.on("ready",() => {
 })
 
 client.on("message",async (msg) => {
-
+    let sImport = fs.readFileSync('./settings.json');
+    let settings = JSON.parse(sImport);
+    let cmd_prefix = settings.prefix;
     // Antwortet und reagiert auf nachricht
     if(msg.content.toLowerCase() === "hallo"){
         await msg.react("👋");
@@ -47,6 +49,7 @@ client.on("message",async (msg) => {
     // Schaut ob ein command mit dem namen existiert
     translated.forEach(c => {
         if(msg.content === cmd_prefix + c.name){
+            if(msg.channel.id != settings.spam)return msg.channel.send(`Custom Commands gehen nur in <#${settings.spam}>`);
             msg.channel.send(c.nachricht);
         }
     })
@@ -55,9 +58,10 @@ client.on("message",async (msg) => {
 	let messageArray = msg.content.split(" ");
 	let cmd = messageArray[0];
 	let args = messageArray.slice(1);
-	let commandfile = client.commands.get(cmd.slice(cmd_prefix.length));
+    let commandfile = client.commands.get(cmd.slice(cmd_prefix.length));
+    
 	// Führt die Command file(Befehl) aus und gibt ihm alle gegebenen werte die der bot handled und mit gibt
-	if (commandfile) commandfile.run(client, msg, args);
+	if (commandfile) commandfile.run(client, msg, settings, args);
 
 })
 

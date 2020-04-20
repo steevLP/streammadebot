@@ -1,5 +1,5 @@
 const {RichEmbed} = require('discord.js');
-module.exports.run = async (client, msg, args) => {
+module.exports.run = async (client, msg, settings, args) => {
 
 }
 
